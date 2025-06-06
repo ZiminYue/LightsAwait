@@ -1,6 +1,16 @@
 # LightsAwait Demo
 A simple demo that demonstrates some interface design and simulates how the chatbot in an anti-domestic violence platform works from front-end to back-end.
 
+### Latest Updates
+
+1. Finish the layout design of Home Page (index.html) and navigation bar on the top
+   
+2. Finish the initial layout design of Chatbot page (chatbot.html)
+
+3. Add a few response messages in the .json files (for testing)
+
+
+
 ### Feature Checklist
 
 1.Being clearly visible on the homepage ☒
