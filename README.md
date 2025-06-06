@@ -4,9 +4,13 @@ A simple demo that demonstrates some interface design and simulates how the chat
 ### Feature Checklist
 
 1.Being clearly visible on the homepage ☒
+
 2.Starting a friendly conversation with the user, guarantee the security of personal data ☐
+
 3.Getting triggered by certain words to access the reporting system ☐
+
 4.Helping users add custom “help codes” to a personal vocabulary ☐
+
 5.Starting a security check by asking follow-up questions based on the custom dictionary ☐
 
 ### To run:
