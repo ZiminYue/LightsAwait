@@ -1,0 +1,15 @@
+{
+  "emotional": {
+    "sad": "I'm here with you. Everything will be alright. Do you want to talk about what happened?",
+    "angry": "Wow, do you want to talk about what happened?",
+    "tired": "You may take a rest. I'll be here for you anytime."
+  },
+  "explanation": {
+    "AI": "I'm your private assistance.",
+    "chatbot": "I get to know you better by studying your conversations."
+  },
+  "danger": {
+    "violence": "This sounds serious. Do you want to make an anonymous report?",
+    "hurt": "I can help you contact support!"
+  }
+}

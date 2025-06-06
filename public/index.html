@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>LightsAwait Home</title>
+  <style>
+  body {
+      margin: 0;
+      padding-top: 20px;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #3e365b;
+      font-family: Arial, sans-serif;
+    }
+
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: #222;
+      padding: 10px 0;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      z-index: 999;
+    }
+
+    nav a {
+      color: #ddd;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    nav a:hover {
+      color: #fff;
+      text-decoration: underline;
+    }
+
+    #phone {
+      position: relative;
+      width: 80vw;   
+      height: calc(135vh - 30px);  
+      max-width: 393px; 
+      max-height: 852px;
+      background-color: #000;
+      border: 1px solid #ccc;
+      border-radius: 16px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.3);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden; 
+    }
+    
+    .title {
+      text-align: center;
+      text-decoration: underline;
+      padding: 20px 0;
+    }
+    
+    pre {
+      background: #161138;
+      padding: 10px;
+      overflow-x: auto;
+      border-radius: 6px;
+      font-size: 12px;
+    }
+
+    @media (max-height: 880px) {
+      #phone {
+        transform: scale(0.9);
+      }
+    }
+
+    @media (max-height: 800px) {
+      #phone {
+        transform: scale(0.8);
+      }
+    }
+
+    @media (max-height: 720px) {
+      #phone {
+        transform: scale(0.7);
+      }
+    }
+
+    header {
+      background: #041445;
+      color: rgb(255, 235, 104);
+      padding: 15px;
+      font-size: 20px;
+      text-align: center;
+    }
+
+    .section {
+      padding: 10px; 
+      position: absolute;
+      top: 80px;
+      left: 0;
+      right: 0;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 11;
+    }
+
+    .btn {
+      display: block;
+      margin: 10px 0; /* Buttons' distance */
+      padding: 14px 20px;
+      border: none;
+      border-radius: 30px;
+      background: #6dacfa;
+      color: rgb(255, 255, 255);
+      font-size: 16px;
+      width: 80%;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+    }
+
+    /* Different botton style */
+    .btn-red {
+      background: #cd1313;
+      color: white;
+      font-weight: bolder; 
+    }
+    .btn-red:active {
+      background: #570c0c; 
+      transform: scale(0.97); 
+    }
+
+    .btn-orange {
+      background: #e87400;
+      color: rgb(255, 255, 255);
+      font-weight: 550; /* Semi-bold */
+    }
+    .btn-orange:active {
+      background: #813a00; 
+      transform: scale(0.97); 
+    }
+
+    .btn-yellow {
+      background: #ffd91b;
+      color: #b90000;
+      font-weight: 550; /* Semi-bold */
+    }
+    .btn-yellow:active {
+      background: #cfaf14; 
+      transform: scale(0.97); 
+    }
+
+    .btn-green {
+      background: #15a841;
+      color: rgb(255, 255, 255);
+      font-weight: 550; 
+    }
+    .btn-green:active {
+      background: rgb(17, 124, 69); 
+      transform: scale(0.97); 
+    }
+
+    .btn-blue {
+      background: #6dacfa;
+      color: white;
+      font-weight: 550; 
+    }
+    .btn-blue:active {
+      background: #303f9f; 
+      transform: scale(0.97); 
+    }
+
+    #chatbot-icon {
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    width: 150px;   
+    height: 150px;
+    cursor: pointer;
+    z-index: 10;
+    transition: transform 0.1s ease, filter 0.1s ease;
+    }
+
+    #chatbot-icon:active {
+    transform: scale(0.95);
+    filter: brightness(0.8);
+    }
+  </style>
+</head>
+<body>
+ <!-- navigation bar -->
+  <nav>
+    <a href="index.html">🏠 Home</a>
+    <a href="chatbot.html">💬 Chatbot</a>
+    <a href="admin.html">🛠️ Admin</a>
+  </nav>
+</nav>
+
+  <!-- page content -->
+  <div id="phone">
+    
+  <header class="title">🌄 · · · LightsAwait · · · 🌅</header>
+  <div class="section">
+    <a href="#Call_Police_or_Ambulance" class="btn btn-red">📞 Make an Emergency Call</a>
+    <a href="#Navigate_to_Map_Page_1" class="btn btn-orange">👮‍♀️Find&nbsp;the&nbsp;Nearest&nbsp;Police&nbsp;Station</a> <!-- Making it no wrap -->
+    <a href="#Navigate_to_Map_Page_2" class="btn btn-orange">🏥 Find the Nearest Hospital</a>
+    <a href="#Navigate_to_Manual_Reporting_Page" class="btn btn-yellow">📝 See something wrong?</a>
+    <a href="chatbot.html" class="btn btn-green">💭 Need a Safe Chat?</a>
+    <a href="chatbot.html" class="btn btn-green">❔ I Have a Question</a>
+    <a href="#Show_the_Language_List" class="btn btn-blue">🌐 Change Language</a>
+    <a href="#Switch_to_Audio_Mode" class="btn btn-blue">🎙️ Speak Instead</a>
+  </div>
+
+  <!-- chatbot icon -->
+   <!-- chatbot speech bubble -->
+   <div id="chatbot-bubble" style="
+        background-color: rgba(255, 255, 0, 0.1); 
+        border: 2px solid #FFD700; 
+        color: #ffffff;
+        position: absolute;
+        bottom: 100px;
+        right: 100px;
+        z-index: 11;
+        padding: 8px 12px;
+        border-top-left-radius: 16px;
+        border-top-right-radius: 16px;
+        border-bottom-left-radius: 16px;
+        border-bottom-right-radius: 0;  /* Make it more like a speech bubble 🗨 */
+        white-space: nowrap;
+        opacity: 1;
+        transition: opacity 0.5s ease;
+        user-select: none;
+        ">
+        Need more help?
+      </div>
+    <!-- chatbot button -->
+  <a href="chatbot.html">
+  <img src="assets/waving.gif" id="chatbot-icon" alt="Chatbot" />
+  </a>
+  
+  </div>
+
+<!-- chatbot messages -->
+  <script>
+    const bubble = document.getElementById('chatbot-bubble');
+    const messages = [
+      "Need more help?",
+      "Not sure what to do?",
+      "Not feeling well?",
+      "Want to talk to someone?",
+      "Lighty's always here for you!",
+    ];
+    let idx = 0;
+
+    setInterval(() => {
+      // Fade out
+      bubble.style.opacity = 0;
+      setTimeout(() => {
+        // Switch words
+        idx = (idx + 1) % messages.length;
+        bubble.textContent = messages[idx];
+        // Fade in
+        bubble.style.opacity = 1;
+      }, 500);
+    }, 3000); // Switch every 3 seconds
+    </script> 
+  
+</body>
+</html>
+
+<!-- admin.html - Simple backend simulation viewer -->
