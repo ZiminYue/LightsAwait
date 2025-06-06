@@ -13,7 +13,7 @@ A simple demo that demonstrates some interface design and simulates how the chat
 # 1. Clone the repository
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/ZiminYue/LightsAwait/tree/main
 cd <your-project-folder>
 ```
 # 2. Install dependencies
