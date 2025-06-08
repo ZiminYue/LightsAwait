@@ -85,8 +85,8 @@
 
     /* Chatbot image */
     #gifArea {
-      width: 300px;
-      height: 300px;
+      width: 310px;
+      height: 310px;
       margin: 0 auto;
       text-align: center;
       background: #000000;
@@ -94,8 +94,8 @@
     }
 
     #gifArea img {
-      width: 300px;
-      height: 300px;
+      width: 310px;
+      height: 310px;
     }
 
     #chatbox {
@@ -284,7 +284,7 @@
     <header>☀ Lighty's Here ☀</header>
 
     <div id="gifArea">
-      <img src="assets/waving.gif" alt="Chatbot Animation" />
+      <img id="chatbotGif" src="assets/happy.gif" alt="Chatbot Animation" />
     </div>
 
     <div id="chatbox"></div>
@@ -307,61 +307,75 @@
 
     <script>
       async function sendMessage(customMessage = null) {
-        const input = document.getElementById('userInput');
-        const chatbox = document.getElementById('chatbox');
-        const message = customMessage || input.value.trim();
+      const input = document.getElementById('userInput');
+      const chatbox = document.getElementById('chatbox');
+      const message = customMessage || input.value.trim();
 
-        if (!message) return;
+      if (!message) return;
 
-        if (!customMessage) input.value = ""; // Clear input box (Only when message is typed)
+      if (!customMessage) input.value = ""; // Clear input box (Only when message is typed)
 
-        // User message
-        const userMsg = document.createElement('div');
-        userMsg.className = 'bubble user';
-        userMsg.innerText = message;
-        chatbox.appendChild(userMsg);
-        input.value = "";
+      // User message
+      const userMsg = document.createElement('div');
+      userMsg.className = 'bubble user';
+      userMsg.innerText = message;
+      chatbox.appendChild(userMsg);
+      input.value = "";
 
-        // Add typing animation
-        const typingBubble = document.createElement('div');
-        typingBubble.className = 'typing';
-        typingBubble.innerHTML = `
-          <span class="dot"></span>
-          <span class="dot"></span>
-          <span class="dot"></span>
-        `;
-        chatbox.appendChild(typingBubble);
-        chatbox.scrollTop = chatbox.scrollHeight;
+      // Add typing animation
+      const typingBubble = document.createElement('div');
+      typingBubble.className = 'typing';
+      typingBubble.innerHTML = `
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+      `;
+      chatbox.appendChild(typingBubble);
+      chatbox.scrollTop = chatbox.scrollHeight;
 
-        try {
-          await new Promise(r => setTimeout(r, 1000)); // Simulating the waiting process
-          const res = await fetch('http://localhost:3000/chat', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message })
-          });
+      try {
+        await new Promise(r => setTimeout(r, 1000));
 
-          const data = await res.json();
-          const reply = data.reply;
+        const res = await fetch('http://localhost:3000/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message })
+        });
 
-          // Remove typing bubble
-          chatbox.removeChild(typingBubble);
+        const data = await res.json();
+        const reply = data.reply;
 
-          // Add chatbot reply
-          const botMsg = document.createElement('div');
-          botMsg.className = 'bubble bot';
-          botMsg.innerText = reply;
-          chatbox.appendChild(botMsg);
-          chatbox.scrollTop = chatbox.scrollHeight;
-        } catch (err) {
-          chatbox.removeChild(typingBubble);
+        let text = '';
+        let gif = null;
 
-          const errorMsg = document.createElement('div');
-          errorMsg.className = 'bubble bot';
-          errorMsg.innerText = '⚠️ Something went wrong.';
-          chatbox.appendChild(errorMsg);
+        if (typeof reply === 'object' && reply !== null) {
+          text = reply.reply;
+          gif = reply.gif;
+        } else {
+          text = reply;
         }
+
+        const gifImg = document.querySelector('#chatbotGif');
+        if (gifImg) {
+          gifImg.src = gif ? `assets/${gif}` : 'assets/happy.gif';
+        }
+
+        chatbox.removeChild(typingBubble);
+
+        const botMsg = document.createElement('div');
+        botMsg.className = 'bubble bot';
+        botMsg.innerText = text;
+        chatbox.appendChild(botMsg);
+        chatbox.scrollTop = chatbox.scrollHeight;
+      } catch (err) {
+        chatbox.removeChild(typingBubble);
+
+        const errorMsg = document.createElement('div');
+        errorMsg.className = 'bubble bot';
+        errorMsg.innerText = '⚠️ Something went wrong.';
+        chatbox.appendChild(errorMsg);
       }
+    }
 
       function quickAsk(text) {
         sendMessage(text);
@@ -405,8 +419,52 @@
         const walk = (y - startY) * 3; //Make it easier to drag
         chatbox.scrollTop = scrollTop - walk;
       });
+      
+
+      // Send message with the Enter Key
+
+      document.getElementById('userInput').addEventListener('keydown', function (event) {
+        if (event.key === 'Enter') {
+          event.preventDefault(); 
+          sendMessage();
+        }
+      });
 
     </script>
+
+  
+
+    <!-- Chatbox Greeting -->
+
+     <script>
+    window.addEventListener("DOMContentLoaded", () => {
+      const chatbox = document.getElementById('chatbox');
+
+      // Typing animation
+      const typingBubble = document.createElement('div');
+      typingBubble.className = 'typing';
+      typingBubble.innerHTML = `
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+      `;
+      chatbox.appendChild(typingBubble);
+      chatbox.scrollTop = chatbox.scrollHeight;
+
+      // Say hello to the user!
+      setTimeout(() => {
+        chatbox.removeChild(typingBubble);
+
+        const welcomeMsg = document.createElement('div');
+        welcomeMsg.className = 'bubble bot';
+        welcomeMsg.innerText = "Hi there! Lighty is here :D How may I help you today?";
+
+        chatbox.appendChild(welcomeMsg);
+        chatbox.scrollTop = chatbox.scrollHeight;
+      }, 600); // Delay
+    });
+  </script>
+
   </div>
 </body>
 </html>
