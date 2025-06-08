@@ -3,11 +3,13 @@ A simple demo that demonstrates some interface design and simulates how the chat
 
 ### Latest Updates
 
-1. Finish the layout design of Home Page (index.html) and navigation bar on the top
+1. Added some expressions of Lighty
    
-2. Finish the initial layout design of Chatbot page (chatbot.html)
+2. Added code for switching expressions when triggered by emotional words
 
-3. Add a few response messages in the .json files (for testing)
+3. Message can be sent with Enter Key
+
+4. Lighty will greet the user first 
 
 
 
@@ -15,7 +17,7 @@ A simple demo that demonstrates some interface design and simulates how the chat
 
 1.Being clearly visible on the homepage ☒
 
-2.Starting a friendly conversation with the user, guarantee the security of personal data ☐
+2.Starting a friendly conversation with the user☒ guarantee the security of personal data ☐
 
 3.Getting triggered by certain words to access the reporting system ☐
 
