@@ -251,6 +251,58 @@
       filter: brightness(0.8);
     }
 
+    h2, h3 {
+      text-align: center;
+      color: #fff;
+      margin-bottom: 10px;
+    }
+
+    .section {
+      background-color: #f9f9f9;
+      margin-bottom: 15px;
+      padding: 10px;
+      border-radius: 8px;
+    }
+
+    .section h4 {
+      margin-top: 0;
+      font-size: 14px;
+      color: #444;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 6px;
+    }
+
+    th, td {
+      border: 1px solid #ccc;
+      padding: 6px;
+      font-size: 12px;
+      text-align: left;
+    }
+
+    ul {
+      padding-left: 20px;
+      margin: 0;
+    }
+
+    li {
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    .priority {
+      background: #fffbe6;
+      border-left: 4px solid orange;
+      padding: 8px;
+      margin-bottom: 12px;
+      font-size: 13px;
+      color: #333;
+      border-radius: 4px;
+    }
+
     @media (max-height: 880px) {
       #phone {
         transform: scale(0.9);
@@ -290,7 +342,7 @@
     <div id="chatbox"></div>
 
     <div id="quickButtons">
-      <button onclick="quickAsk('I need help.')">I need help</button>
+      <button onclick="quickAsk('I need some help.')">I need help</button>
       <button onclick="quickAsk('Someone else need help.')">Someone else need help</button>
       <button onclick="quickAsk('I want to talk to someone.')">I want to talk</button>
       <button onclick="quickAsk('Can you speak another language?')">Can you speak another language?</button>
@@ -377,13 +429,19 @@
       }
     }
 
+      //Quick button (with cool down)
+      let quickAskCooldown = false;
+
       function quickAsk(text) {
+        if (quickAskCooldown) return;
+        quickAskCooldown = true;
         sendMessage(text);
+        setTimeout(() => {
+          quickAskCooldown = false;
+        }, 1000); // 1 second cooldown
       }
 
-
       // Chatbox Scrolliing (with mouse)
-
       /* 
       This part is for demonstrating a scrollable chat box on a mobile device (scroll with mouse dragging),
       but it may not fully replicate the native mobile UX. For PC users of this demo, using the mouse wheel
@@ -457,13 +515,14 @@
 
         const welcomeMsg = document.createElement('div');
         welcomeMsg.className = 'bubble bot';
-        welcomeMsg.innerText = "Hi there! Lighty is here :D How may I help you today?";
+        welcomeMsg.innerText = "Hi there! My name is Lighty 😊 I'm here to listen and support you. What you share stays private and safe — unless someone is in danger and needs urgent help. This is a safe space, and you're not alone!\n\nHow may I help you today?";
 
         chatbox.appendChild(welcomeMsg);
         chatbox.scrollTop = chatbox.scrollHeight;
       }, 600); // Delay
     });
   </script>
+  
 
   </div>
 </body>
