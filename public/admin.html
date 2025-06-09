@@ -42,9 +42,9 @@
 
     #phone {
       position: relative;
-      width: 80vw;   
-      height: calc(135vh - 30px);  
-      max-width: 393px; 
+      width: 80vw;
+      height: calc(135vh - 30px);
+      max-width: 393px;
       max-height: 852px;
       background-color: #000;
       border: 1px solid #ccc;
@@ -52,19 +52,61 @@
       box-shadow: 0 0 20px rgba(0,0,0,0.3);
       display: flex;
       flex-direction: column;
-      overflow: hidden; 
-    }
-    
-    h2 {
-      text-align: center;
+      padding: 16px;
+      box-sizing: border-box;
+      overflow-y: auto;
     }
 
-    pre {
-      background: #f1f1f1;
+    h2, h3 {
+      text-align: center;
+      color: #fff;
+      margin-bottom: 10px;
+    }
+
+    .section {
+      background-color: #f9f9f9;
+      margin-bottom: 15px;
       padding: 10px;
-      overflow-x: auto;
-      border-radius: 6px;
+      border-radius: 8px;
+    }
+
+    .section h4 {
+      margin-top: 0;
+      font-size: 14px;
+      color: #444;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 6px;
+    }
+
+    th, td {
+      border: 1px solid #ccc;
+      padding: 6px;
       font-size: 12px;
+      text-align: left;
+    }
+
+    ul {
+      padding-left: 20px;
+      margin: 0;
+    }
+
+    li {
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    .priority {
+      background: #fffbe6;
+      border-left: 4px solid orange;
+      padding: 8px;
+      margin-bottom: 12px;
+      font-size: 13px;
+      color: #333;
+      border-radius: 4px;
     }
 
     @media (max-height: 880px) {
@@ -88,16 +130,20 @@
 </head>
 <body>
 
-  <!-- navigation bar -->
+  <!-- Navigation -->
   <nav>
     <a href="index.html">🏠 Home</a>
     <a href="chatbot.html">💬 Chatbot</a>
     <a href="admin.html">🛠️ Admin</a>
   </nav>
 
-  <!-- phone screen -->
+  <!-- Phone UI -->
   <div id="phone">
     <h2>Keyword Databases</h2>
+    <div class="priority">
+      <strong>⚠️ Keyword Matching Order:</strong><br>
+      <code>Trigger Words > Custom Codes > Reaction Keywords</code>
+    </div>
     <div id="output">Loading...</div>
   </div>
 
@@ -106,12 +152,59 @@
       try {
         const res = await fetch('/api/words');
         const data = await res.json();
-        const display = JSON.stringify(data, null, 2);
-        document.getElementById('output').innerHTML = `<pre>${display}</pre>`;
+
+        let html = '';
+
+        // 1. Triggers
+        html += `<div class="section">
+                   <h4>🚨 Trigger Words</h4>
+                   <ul>${data.triggers.triggers.map(w => `<li>${w}</li>`).join('')}</ul>
+                   <p><strong>Reply:</strong> ${data.triggers.reply}<br>
+                      <strong>GIF:</strong> ${data.triggers.gif}</p>
+                 </div>`;
+
+        // 2. Custom Codes (key-value style)
+        html += `<div class="section">
+                   <h4>✨ Custom Codes</h4>
+                   <table>
+                     <tr><th>Code</th></tr>
+                     ${data.custom.custom_codes.map(c => `<tr><td>${c}</td></tr>`).join('')}
+                   </table>
+                 </div>`;
+
+        // 3. Reaction Keywords (nested table per category)
+        html += `<div class="section">
+                   <h4>🎭 Reaction Keywords</h4>`;
+        for (const category in data.reactions) {
+          html += `<strong>${category}</strong><table>
+                     <tr><th>Keyword</th><th>Response</th></tr>`;
+          const keywords = data.reactions[category];
+          for (const key in keywords) {
+            html += `<tr><td>${key}</td><td>${keywords[key]}</td></tr>`;
+          }
+          html += `</table>`;
+        }
+        html += `</div>`;
+
+        // 4. Flagged messages area (optional placeholder for now)
+        html += `<div class="section">
+                   <h4>🚩 Flagged Messages</h4>
+                   <ul id="flaggedList"><li>Loading flagged messages...</li></ul>
+                 </div>`;
+
+        document.getElementById('output').innerHTML = html;
+
+        // Load flagged logs
+        const flaggedRes = await fetch('/api/flagged');
+        const flagged = await flaggedRes.json();
+        const flaggedHtml = flagged.messages.map(m => `<li>${m}</li>`).join('');
+        document.getElementById('flaggedList').innerHTML = flaggedHtml;
+
       } catch (e) {
         document.getElementById('output').textContent = 'Failed to load data.';
       }
     }
+
     loadWords();
   </script>
 </body>
