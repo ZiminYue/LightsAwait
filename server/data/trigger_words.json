@@ -1,8 +1,12 @@
 {
   "triggers": [
-    "hit me",
-    "he punched",
-    "got hurt",
-    "domestic violence"
-  ]
+    "hit",
+    "punch",
+    "hurt",
+    "domestic violence",
+    "scary",
+    "blood"
+  ],
+  "reply": "That's serious!",
+  "gif": "serious.gif"
 }

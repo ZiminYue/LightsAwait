@@ -1,8 +1,14 @@
 {
   "emotional": {
     "sad": "I'm here with you. Everything will be alright. Do you want to talk about what happened?",
-    "angry": "Wow, do you want to talk about what happened?",
-    "tired": "You may take a rest. I'll be here for you anytime."
+    "angry": {
+      "reply": "Wow, do you want to talk about what happened?",
+      "gif": "oops.gif"
+    },
+    "tired": "You may take a rest. I'll be here for you anytime.",
+    "happy": {
+      "reply": "Great! That's fantastic!!",
+      "gif": "enjoy.gif"}
   },
   "explanation": {
     "AI": "I'm your private assistance.",

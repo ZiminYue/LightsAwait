@@ -1,3 +1,4 @@
+const flaggedPath = './server/data/flagged.json';
 const express = require('express');
 const fs = require('fs');
 const cors = require('cors');
@@ -36,16 +37,23 @@ function getResponseForInput(input) {
   return null;
 }
 
-
+// Save flagged messages
+function saveFlaggedMessage(message) {
+  const current = JSON.parse(fs.readFileSync(flaggedPath));
+  current.messages.unshift(message);
+  if (current.messages.length > 50) current.messages = current.messages.slice(0, 50);
+  fs.writeFileSync(flaggedPath, JSON.stringify(current, null, 2));
+}
 
 // Route: Fetch all keyword dictionaries (for backend display)
 app.get('/api/words', (req, res) => {
   const triggers = JSON.parse(fs.readFileSync(triggerWordsPath));
   const custom = JSON.parse(fs.readFileSync(customCodesPath));
+  const reactions = getReactionKeywords();
   res.json({
     triggers,
     custom,
-    reactions: reactionKeywords
+    reactions
   });
 });
 
@@ -63,14 +71,40 @@ app.post('/api/custom-codes', (req, res) => {
 
 // Route: Chat message handler, simulates AI response
 app.post('/chat', (req, res) => {
-  const userInput = req.body.message;
-  const result = getResponseForInput(userInput);
+  const userInput = req.body.message.toLowerCase();
 
-  if (result) {
-    res.json({ reply: result.response, category: result.category });
-  } else {
-    res.json({ reply: "Thanks for sharing. I'm glad to help you!", category: "neutral" });
+  // 1. Priortize trigger_words.json
+  const triggerData = JSON.parse(fs.readFileSync(triggerWordsPath));
+  const triggers = triggerData.triggers || [];
+
+  const matchedTrigger = triggers.find(trigger => userInput.includes(trigger.toLowerCase()));
+  if (matchedTrigger) {
+    return res.json({
+      reply: {
+        reply: triggerData.reply,
+        gif: triggerData.gif
+      },
+      category: "triggered"
+    });
   }
+
+  // 2. Else check reaction_keywords.json
+  const result = getResponseForInput(userInput);
+  if (result) {
+    return res.json({ reply: result.response, category: result.category });
+  }
+
+  // 3. Default message
+  return res.json({
+    reply: "Don't worry, I’m here for you. You’re not facing this alone 💕",
+    category: "neutral"
+  });
+});
+
+// New route for flagged messages
+app.get('/api/flagged', (req, res) => {
+  const flagged = JSON.parse(fs.readFileSync(flaggedPath));
+  res.json(flagged);
 });
 
 app.listen(PORT, () => {
