@@ -15,11 +15,7 @@ A simple demo that demonstrates some interface design and simulates how the chat
 
 ### Latest Issues
 
-When I switch from Chatbot page to Admin page, they refreshed, so I never get to know what happened to the backend.
-
-ChatGPT offers me 2 ways of solving it: One is to combine these 2 pages into one .html file, another is use something called iframe.
-
-However, as I reached the limit of that "smart model", it couldn't help me figure out how to implement it yet. I'll have to try it later.
+Trying to do frontend-backend connections simulating AI xp
 
 
 ### Feature Checklist
@@ -30,7 +26,7 @@ However, as I reached the limit of that "smart model", it couldn't help me figur
 
 3.Getting triggered by certain words to access the reporting system ☐
 
-4.Helping users add custom “help codes” to a personal vocabulary ☐
+4.Helping users add custom “help codes” to a personal vocabulary ☒
 
 5.Starting a security check by asking follow-up questions based on the custom dictionary ☐
 
