@@ -24,7 +24,7 @@ Need to make sure the answer itself won't trigger any words
 
 4.Helping users add custom “help codes” to a personal vocabulary ☒
 
-5.Starting a security check by asking follow-up questions based on the custom dictionary ☐
+5.Starting a security check by asking follow-up questions based on the custom dictionary ☒
 
 ### To run:
 # 1. Clone the repository
