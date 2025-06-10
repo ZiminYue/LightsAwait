@@ -364,6 +364,22 @@
       let awaitingReportConfirmation = false;
       let awaitingReportContent = false;
 
+      //Disenable input
+      function setInputEnabled(enabled) {
+        const inputElement = document.getElementById('userInput');
+        const sendButton = document.querySelector('.send-btn');
+        const quickButtons = document.querySelectorAll('#quickButtons button');
+        
+        inputElement.disabled = !enabled;
+        sendButton.disabled = !enabled;
+        quickButtons.forEach(btn => btn.disabled = !enabled);
+        
+        const opacity = enabled ? '1' : '0.5';
+        inputElement.style.opacity = opacity;
+        sendButton.style.opacity = opacity;
+        quickButtons.forEach(btn => btn.style.opacity = opacity);
+      }
+
       async function sendMessage(customMessage = null) {
         const input = document.getElementById('userInput');
         const chatbox = document.getElementById('chatbox');
@@ -414,7 +430,7 @@
 
             const botMsg = document.createElement('div');
             botMsg.className = 'bubble bot';
-            botMsg.innerText = "Thank you for sharing this with me. Your report has been recorded safely. If you think of anything else you want to tell me, I'll be right here whenever you need me.";
+            botMsg.innerText = "Thank you for sharing this with me. Your information will be compiled into a report and forwarded to appropriate organizations that can provide the necessary help and support. \n\nIf you need anything else or have more to tell me, I'm here for you 💞";
 
             const gifImg = document.querySelector('#chatbotGif');
             if (gifImg) {
@@ -503,7 +519,7 @@
 
         try {
           await new Promise(r => setTimeout(r, 1000));
-
+          
           const res = await fetch('http://localhost:3000/chat', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -538,6 +554,27 @@
 
           // If triggered
           if (category === 'triggered') {
+
+            //Flag this message
+            try {
+              await fetch('http://localhost:3000/flag-message', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                  message: message, 
+                  timestamp: new Date().toISOString(),
+                  type: 'trigger_detected', 
+                  status: 'auto_flagged', 
+                })
+              });
+
+              console.log('Trigger message flagged successfully');
+            } catch (error) {
+              console.error('Failed to flag trigger message:', error);
+            }
+
+            //Ask if the user need assistance
+            setInputEnabled(false);
             setTimeout(() => {
               const followupMsg = document.createElement('div');
               followupMsg.className = 'bubble bot';
@@ -546,6 +583,7 @@
 
               chatbox.scrollTop = chatbox.scrollHeight;
               awaitingReportConfirmation = true;
+              setInputEnabled(true);
             }, 3000);
           }
 
@@ -558,7 +596,16 @@
           errorMsg.innerText = '⚠️ Something went wrong.';
           chatbox.appendChild(errorMsg);
         }
+
+        if (category === 'security_check') {
+          awaitingSecurityAnswer = true; 
+        }
+
+        if (category === 'security_verified' || category === 'security_failed') {
+          awaitingSecurityAnswer = false;
+        }
       }
+
       //Quick button (with cool down)
       let quickAskCooldown = false;
 
