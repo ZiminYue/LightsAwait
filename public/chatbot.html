@@ -40,6 +40,31 @@
       text-decoration: underline;
     }
 
+    /* Hide navigation bar when load as iframe */
+      body.iframe-mode nav {
+        display: none;
+      }
+
+      body.iframe-mode {
+        padding-top: 0;
+      }
+
+      /* Edit #phone in iframe mode */
+      body.iframe-mode #phone {
+        height: 100vh;
+        width: 100vw;
+        max-width: none;
+        max-height: none;
+        border: none;
+        border-radius: 0;
+        box-shadow: none;
+      }
+
+      /* Hide back button in iframe mode */
+      body.iframe-mode #backBtn {
+        display: none;
+      }
+
     #phone {
       position: relative;
       width: 80vw;
@@ -54,6 +79,27 @@
       flex-direction: column;
       overflow: hidden;
     }
+
+    #chatContainer {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+#adminFrame {
+  position: fixed;
+  top: 50px;
+  left: 0;
+  display: none;
+  width: 100vw;
+  height: calc(100vh - 50px);
+  border: none;
+  z-index: 10;
+}
 
     header {
       background-color: #000;
@@ -80,7 +126,7 @@
 
     #backBtn:active {
     transform: scale(0.6);           
-    color: wrgb(151, 151, 151)
+    color: rgb(151, 151, 151);
     }
 
     /* Chatbot image */
@@ -115,6 +161,7 @@
     #chatbox::-webkit-scrollbar {
       display: none; /* Chrome/Safari */
     }
+    
 
     .bubble {
       max-width: 80%;
@@ -251,57 +298,6 @@
       filter: brightness(0.8);
     }
 
-    h2, h3 {
-      text-align: center;
-      color: #fff;
-      margin-bottom: 10px;
-    }
-
-    .section {
-      background-color: #f9f9f9;
-      margin-bottom: 15px;
-      padding: 10px;
-      border-radius: 8px;
-    }
-
-    .section h4 {
-      margin-top: 0;
-      font-size: 14px;
-      color: #444;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 6px;
-    }
-
-    th, td {
-      border: 1px solid #ccc;
-      padding: 6px;
-      font-size: 12px;
-      text-align: left;
-    }
-
-    ul {
-      padding-left: 20px;
-      margin: 0;
-    }
-
-    li {
-      font-size: 14px;
-      margin-bottom: 4px;
-    }
-
-    .priority {
-      background: #fffbe6;
-      border-left: 4px solid orange;
-      padding: 8px;
-      margin-bottom: 12px;
-      font-size: 13px;
-      color: #333;
-      border-radius: 4px;
-    }
 
     @media (max-height: 880px) {
       #phone {
@@ -331,6 +327,7 @@
   </nav>
 
  <!-- page content -->
+  <div id="chatContainer">
   <div id="phone">
     <a href="index.html" id="backBtn">𒌋</a>
     <header>☀ Lighty's Here ☀</header>
@@ -357,78 +354,211 @@
       <button class="send-btn" onclick="sendMessage()">Send</button>
     </div>
 
+    
+</div>
+ <iframe id="adminFrame" title="Admin Panel" src=""
+  style="display:none; position: absolute; top:10px; left: 0; width: 100%; height: calc(100vh - 50px); border: none; z-index: 10;" 
+  scrolling="auto"></iframe>
+
     <script>
+      let awaitingReportConfirmation = false;
+      let awaitingReportContent = false;
+
       async function sendMessage(customMessage = null) {
-      const input = document.getElementById('userInput');
-      const chatbox = document.getElementById('chatbox');
-      const message = customMessage || input.value.trim();
+        const input = document.getElementById('userInput');
+        const chatbox = document.getElementById('chatbox');
+        const message = customMessage || input.value.trim();
 
-      if (!message) return;
+        if (!message) return;
 
-      if (!customMessage) input.value = ""; // Clear input box (Only when message is typed)
+        if (!customMessage) input.value = ""; // Clear input box (Only when message is typed)
 
-      // User message
-      const userMsg = document.createElement('div');
-      userMsg.className = 'bubble user';
-      userMsg.innerText = message;
-      chatbox.appendChild(userMsg);
-      input.value = "";
+        // User message
+        const userMsg = document.createElement('div');
+        userMsg.className = 'bubble user';
+        userMsg.innerText = message;
+        chatbox.appendChild(userMsg);
+        input.value = "";
 
-      // Add typing animation
-      const typingBubble = document.createElement('div');
-      typingBubble.className = 'typing';
-      typingBubble.innerHTML = `
-        <span class="dot"></span>
-        <span class="dot"></span>
-        <span class="dot"></span>
-      `;
-      chatbox.appendChild(typingBubble);
-      chatbox.scrollTop = chatbox.scrollHeight;
+        // Wait for reporting content
+        if (awaitingReportContent) {
+          // Save report content to flagged.json
+          try {
+            await fetch('http://localhost:3000/flag-message', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ 
+                message: message,
+                timestamp: new Date().toISOString(),
+                type: 'report_content',
+                status: 'submitted'
+              })
+            });
+          } catch (error) {
+            console.error('Failed to save report content:', error);
+          }
 
-      try {
-        await new Promise(r => setTimeout(r, 1000));
+          // Add typing animation
+          const typingBubble = document.createElement('div');
+          typingBubble.className = 'typing';
+          typingBubble.innerHTML = `
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+          `;
+          chatbox.appendChild(typingBubble);
+          chatbox.scrollTop = chatbox.scrollHeight;
 
-        const res = await fetch('http://localhost:3000/chat', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ message })
-        });
+          setTimeout(() => {
+            chatbox.removeChild(typingBubble);
 
-        const data = await res.json();
-        const reply = data.reply;
+            const botMsg = document.createElement('div');
+            botMsg.className = 'bubble bot';
+            botMsg.innerText = "Thank you for sharing this with me. Your report has been recorded safely. If you think of anything else you want to tell me, I'll be right here whenever you need me.";
 
-        let text = '';
-        let gif = null;
+            const gifImg = document.querySelector('#chatbotGif');
+            if (gifImg) {
+              gifImg.src = 'assets/breath.gif'; 
+            }
 
-        if (typeof reply === 'object' && reply !== null) {
-          text = reply.reply;
-          gif = reply.gif;
-        } else {
-          text = reply;
+            chatbox.appendChild(botMsg);
+            chatbox.scrollTop = chatbox.scrollHeight;
+            
+            awaitingReportContent = false; 
+          }, 1500);
+
+          return;
         }
 
-        const gifImg = document.querySelector('#chatbotGif');
-        if (gifImg) {
-          gifImg.src = gif ? `assets/${gif}` : 'assets/happy.gif';
+        // Wait for reporting confirmation (yes./no)
+        if (awaitingReportConfirmation) {
+          const answer = message.trim().toLowerCase();
+          
+          // Add typing animation
+          const typingBubble = document.createElement('div');
+          typingBubble.className = 'typing';
+          typingBubble.innerHTML = `
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+          `;
+          chatbox.appendChild(typingBubble);
+          chatbox.scrollTop = chatbox.scrollHeight;
+
+          
+          setTimeout(() => {
+           
+            chatbox.removeChild(typingBubble);
+
+            const botMsg = document.createElement('div');
+            botMsg.className = 'bubble bot';
+            let gifToShow = 'serious.gif'; 
+
+            if (['yes', 'yeah', 'yep', 'yup', 'sure', 'okay', 'ok', 'y', 'k'].includes(answer.toLowerCase())) {
+              botMsg.innerText = "Thank you for trusting me with this 💞 Please make sure you're in a safe and private place before continuing. Take your time and tell me what happened when you're ready.";
+              gifToShow = 'happy.gif'; 
+              awaitingReportContent = true;
+            } else if (['no', 'nope', 'not now', 'maybe later', 'n'].includes(answer.toLowerCase())) {
+              botMsg.innerText = "No problem at all 💞 I'm here whenever you need me.";
+              gifToShow = 'breath.gif'; 
+            } else {
+              botMsg.innerText = "I want to make sure I understand you correctly. Could you let me know 'yes' or 'no'? I'm here to support you either way.";
+              gifToShow = 'oops.gif'; 
+              
+              
+              const gifImg = document.querySelector('#chatbotGif');
+              if (gifImg) {
+                gifImg.src = `assets/${gifToShow}`;
+              }
+              
+              chatbox.appendChild(botMsg);
+              chatbox.scrollTop = chatbox.scrollHeight;
+              return; 
+            }
+
+            
+            const gifImg = document.querySelector('#chatbotGif');
+            if (gifImg) {
+              gifImg.src = `assets/${gifToShow}`;
+            }
+
+            chatbox.appendChild(botMsg);
+            chatbox.scrollTop = chatbox.scrollHeight;
+            awaitingReportConfirmation = false; // Reset confirmation status
+          }, 1200); 
+
+          return; 
         }
 
-        chatbox.removeChild(typingBubble);
-
-        const botMsg = document.createElement('div');
-        botMsg.className = 'bubble bot';
-        botMsg.innerText = text;
-        chatbox.appendChild(botMsg);
+        // Add typing animation (to all messages)
+        const typingBubble = document.createElement('div');
+        typingBubble.className = 'typing';
+        typingBubble.innerHTML = `
+          <span class="dot"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
+        `;
+        chatbox.appendChild(typingBubble);
         chatbox.scrollTop = chatbox.scrollHeight;
-      } catch (err) {
-        chatbox.removeChild(typingBubble);
 
-        const errorMsg = document.createElement('div');
-        errorMsg.className = 'bubble bot';
-        errorMsg.innerText = '⚠️ Something went wrong.';
-        chatbox.appendChild(errorMsg);
+        try {
+          await new Promise(r => setTimeout(r, 1000));
+
+          const res = await fetch('http://localhost:3000/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message })
+          });
+
+          const data = await res.json();
+          const reply = data.reply;
+          const category = data.category;
+
+          let text = '';
+          let gif = null;
+
+          if (typeof reply === 'object' && reply !== null) {
+            text = reply.reply;
+            gif = reply.gif;
+          } else {
+            text = reply;
+          }
+
+          const gifImg = document.querySelector('#chatbotGif');
+          if (gifImg) {
+            gifImg.src = gif ? `assets/${gif}` : 'assets/happy.gif';
+          }
+
+          chatbox.removeChild(typingBubble);
+
+          const botMsg = document.createElement('div');
+          botMsg.className = 'bubble bot';
+          botMsg.innerText = text;
+          chatbox.appendChild(botMsg);
+
+          // If triggered
+          if (category === 'triggered') {
+            setTimeout(() => {
+              const followupMsg = document.createElement('div');
+              followupMsg.className = 'bubble bot';
+              followupMsg.innerHTML = "<span style='color: yellow; font-weight: bold'>Would you like me to help file a report now?</span>";
+              chatbox.appendChild(followupMsg);
+
+              chatbox.scrollTop = chatbox.scrollHeight;
+              awaitingReportConfirmation = true;
+            }, 3000);
+          }
+
+          chatbox.scrollTop = chatbox.scrollHeight;
+        } catch (err) {
+          chatbox.removeChild(typingBubble);
+
+          const errorMsg = document.createElement('div');
+          errorMsg.className = 'bubble bot';
+          errorMsg.innerText = '⚠️ Something went wrong.';
+          chatbox.appendChild(errorMsg);
+        }
       }
-    }
-
       //Quick button (with cool down)
       let quickAskCooldown = false;
 
@@ -488,13 +618,34 @@
         }
       });
 
-    </script>
+        document.querySelector('nav a[href="admin.html"]').addEventListener('click', function(e) {
+            e.preventDefault();
+            const phone = document.getElementById('phone');
+            const iframe = document.getElementById('adminFrame');
+            
+            phone.style.display = 'none';
+            iframe.style.display = 'block';
+            iframe.src = 'admin.html';
+        });
+
+        document.querySelector('nav a[href="chatbot.html"]').addEventListener('click', function(e) {
+            e.preventDefault();
+            const phone = document.getElementById('phone');
+            const iframe = document.getElementById('adminFrame');
+
+            iframe.style.display = 'none';
+            iframe.src = '';
+            phone.style.display = 'flex';
+            console.log('Switching back to chatbot');
+        });
+
+    
 
   
 
-    <!-- Chatbox Greeting -->
+    // Chatbox Greeting
 
-     <script>
+    
     window.addEventListener("DOMContentLoaded", () => {
       const chatbox = document.getElementById('chatbox');
 
@@ -521,6 +672,7 @@
         chatbox.scrollTop = chatbox.scrollHeight;
       }, 600); // Delay
     });
+
   </script>
   
 
