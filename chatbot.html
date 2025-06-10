@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>LightsAwait Chatbot</title>
+  <style>
+    body {
+      margin: 0;
+      padding-top: 20px;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #3e365b;
+      font-family: Arial, sans-serif;
+    }
+
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: #222;
+      padding: 10px 0;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      z-index: 999;
+    }
+
+    nav a {
+      color: #ddd;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    nav a:hover {
+      color: #fff;
+      text-decoration: underline;
+    }
+
+    /* Hide navigation bar when load as iframe */
+      body.iframe-mode nav {
+        display: none;
+      }
+
+      body.iframe-mode {
+        padding-top: 0;
+      }
+
+      /* Edit #phone in iframe mode */
+      body.iframe-mode #phone {
+        height: 100vh;
+        width: 100vw;
+        max-width: none;
+        max-height: none;
+        border: none;
+        border-radius: 0;
+        box-shadow: none;
+      }
+
+      /* Hide back button in iframe mode */
+      body.iframe-mode #backBtn {
+        display: none;
+      }
+
+    #phone {
+      position: relative;
+      width: 80vw;
+      height: calc(135vh - 30px);
+      max-width: 393px;
+      max-height: 852px;
+      background-color: #000;
+      border: 1px solid #ccc;
+      border-radius: 16px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.3);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    #chatContainer {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+#adminFrame {
+  position: fixed;
+  top: 50px;
+  left: 0;
+  display: none;
+  width: 100vw;
+  height: calc(100vh - 50px);
+  border: none;
+  z-index: 10;
+}
+
+    header {
+      background-color: #000;
+      color: rgb(255, 235, 104);
+      padding: 15px;
+      text-align: center;
+      font-size: 20px;
+      font-weight: light;
+    }
+
+    /* Back to Home Page */
+    #backBtn {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    color: white;
+    background: rgba(0,0,0,0.4);
+    text-decoration: none;
+    font-size: 20px;
+    padding: 6px 10px;
+    border-radius: 8px;
+    z-index: 1000;
+    }
+
+    #backBtn:active {
+    transform: scale(0.6);           
+    color: rgb(151, 151, 151);
+    }
+
+    /* Chatbot image */
+    #gifArea {
+      width: 310px;
+      height: 310px;
+      margin: 0 auto;
+      text-align: center;
+      background: #000000;
+      padding: 20px;
+    }
+
+    #gifArea img {
+      width: 310px;
+      height: 310px;
+    }
+
+    #chatbox {
+      flex: 1;
+      overflow-y: auto;
+      background: #000;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      scroll-behavior: smooth;
+
+      /* Hide the scroll bar, but can be scrolled */
+      scrollbar-width: none; /* Firefox */
+      -ms-overflow-style: none; /* IE 10+ */
+    }
+
+    #chatbox::-webkit-scrollbar {
+      display: none; /* Chrome/Safari */
+    }
+    
+
+    .bubble {
+      max-width: 80%;
+      padding: 10px 14px;
+      margin: 8px 0;
+      border-radius: 18px;
+      line-height: 1.4;
+      word-wrap: break-word;
+    }
+
+    /* Typing animation */
+    .typing {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin: 8px 0;
+      padding: 10px 14px;
+      background-color: #FFD700;
+      border-radius: 18px;
+      max-width: 80%;
+      align-self: flex-start;
+      text-align: left;
+      border-top-left-radius: 0;
+    }
+
+    .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background-color: #888;
+      animation: blink 1.4s infinite both;
+    }
+
+    .dot:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .dot:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+
+    @keyframes blink {
+      0%, 80%, 100% {
+        opacity: 0;
+      }
+      40% {
+        opacity: 1;
+      }
+    }
+
+    /* User & Chatbot input bubble */
+    .user {
+      background-color: rgb(17, 124, 69);
+      color: white;
+      align-self: flex-end;
+      text-align: right;
+      border-top-right-radius: 0;
+    }
+
+    .bot {
+      border: 2px solid #FFD700; 
+      color: #ffffff;
+      color: white;
+      align-self: flex-start;
+      text-align: left;
+      border-top-left-radius: 0;
+    }
+
+    #quickButtons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px;
+      background-color: #111;
+      margin-top: auto;
+    }
+
+    #quickButtons button {
+      padding: 6px 10px;
+      font-size: 15px;
+      border-radius: 10px;
+      background-color: #969071;
+      color: white;
+      border: none;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    #quickButtons button:active {
+    transform: scale(0.96);           
+    filter: brightness(0.8);        
+    }
+
+    #inputArea {
+      display: flex;
+      align-items: center;
+      border-top: 1px solid #444;
+      padding: 8px;
+      background: #111;
+    }
+
+    #userInput {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #444;
+      border-radius: 20px;
+      background-color: #222;
+      color: white;
+      outline: none;
+      font-size: 14px;
+    }
+
+    .icon-btn {
+      background: none;
+      border: none;
+      font-size: 18px;
+      color: white;
+      padding: 0 10px;
+      cursor: pointer;
+    }
+
+    button.send-btn {
+      background: #303f9f;
+      color: white;
+      border: none;
+      border-radius: 20px;
+      padding: 8px 14px;
+      margin-left: 5px;
+    }
+
+    button.send-btn:active {
+      transform: scale(0.95);
+      filter: brightness(0.8);
+    }
+
+
+    @media (max-height: 880px) {
+      #phone {
+        transform: scale(0.9);
+      }
+    }
+
+    @media (max-height: 800px) {
+      #phone {
+        transform: scale(0.8);
+      }
+    }
+
+    @media (max-height: 720px) {
+      #phone {
+        transform: scale(0.7);
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- navigation bar -->
+  <nav>
+    <a href="index.html">🏠 Home</a>
+    <a href="chatbot.html">💬 Chatbot</a>
+    <a href="admin.html">🛠️ Admin</a>
+  </nav>
+
+ <!-- page content -->
+  <div id="chatContainer">
+  <div id="phone">
+    <a href="index.html" id="backBtn">𒌋</a>
+    <header>☀ Lighty's Here ☀</header>
+
+    <div id="gifArea">
+      <img id="chatbotGif" src="assets/happy.gif" alt="Chatbot Animation" />
+    </div>
+
+    <div id="chatbox"></div>
+
+    <div id="quickButtons">
+      <button onclick="quickAsk('I need some help.')">I need help</button>
+      <button onclick="quickAsk('Someone else need help.')">Someone else need help</button>
+      <button onclick="quickAsk('I want to talk to someone.')">I want to talk</button>
+      <button onclick="quickAsk('Can you speak another language?')">Can you speak another language?</button>
+      <button onclick="quickAsk('Who are you?')">Who are you?</button>
+      <button onclick="quickAsk('What can you do?')">What can you do?</button>
+    </div>
+
+    <div id="inputArea">
+      <button class="icon-btn">🎙️</button>
+      <input type="text" id="userInput" placeholder="Type your message..." />
+      <button class="icon-btn">➕</button>
+      <button class="send-btn" onclick="sendMessage()">Send</button>
+    </div>
+
+    
+</div>
+ <iframe id="adminFrame" title="Admin Panel" src=""
+  style="display:none; position: absolute; top:10px; left: 0; width: 100%; height: calc(100vh - 50px); border: none; z-index: 10;" 
+  scrolling="auto"></iframe>
+
+    <script>
+      let awaitingReportConfirmation = false;
+      let awaitingReportContent = false;
+
+      async function sendMessage(customMessage = null) {
+        const input = document.getElementById('userInput');
+        const chatbox = document.getElementById('chatbox');
+        const message = customMessage || input.value.trim();
+
+        if (!message) return;
+
+        if (!customMessage) input.value = ""; // Clear input box (Only when message is typed)
+
+        // User message
+        const userMsg = document.createElement('div');
+        userMsg.className = 'bubble user';
+        userMsg.innerText = message;
+        chatbox.appendChild(userMsg);
+        input.value = "";
+
+        // Wait for reporting content
+        if (awaitingReportContent) {
+          // Save report content to flagged.json
+          try {
+            await fetch('http://localhost:3000/flag-message', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ 
+                message: message,
+                timestamp: new Date().toISOString(),
+                type: 'report_content',
+                status: 'submitted'
+              })
+            });
+          } catch (error) {
+            console.error('Failed to save report content:', error);
+          }
+
+          // Add typing animation
+          const typingBubble = document.createElement('div');
+          typingBubble.className = 'typing';
+          typingBubble.innerHTML = `
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+          `;
+          chatbox.appendChild(typingBubble);
+          chatbox.scrollTop = chatbox.scrollHeight;
+
+          setTimeout(() => {
+            chatbox.removeChild(typingBubble);
+
+            const botMsg = document.createElement('div');
+            botMsg.className = 'bubble bot';
+            botMsg.innerText = "Thank you for sharing this with me. Your report has been recorded safely. If you think of anything else you want to tell me, I'll be right here whenever you need me.";
+
+            const gifImg = document.querySelector('#chatbotGif');
+            if (gifImg) {
+              gifImg.src = 'assets/breath.gif'; 
+            }
+
+            chatbox.appendChild(botMsg);
+            chatbox.scrollTop = chatbox.scrollHeight;
+            
+            awaitingReportContent = false; 
+          }, 1500);
+
+          return;
+        }
+
+        // Wait for reporting confirmation (yes./no)
+        if (awaitingReportConfirmation) {
+          const answer = message.trim().toLowerCase();
+          
+          // Add typing animation
+          const typingBubble = document.createElement('div');
+          typingBubble.className = 'typing';
+          typingBubble.innerHTML = `
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+          `;
+          chatbox.appendChild(typingBubble);
+          chatbox.scrollTop = chatbox.scrollHeight;
+
+          
+          setTimeout(() => {
+           
+            chatbox.removeChild(typingBubble);
+
+            const botMsg = document.createElement('div');
+            botMsg.className = 'bubble bot';
+            let gifToShow = 'serious.gif'; 
+
+            if (['yes', 'yeah', 'yep', 'yup', 'sure', 'okay', 'ok', 'y', 'k'].includes(answer.toLowerCase())) {
+              botMsg.innerText = "Thank you for trusting me with this 💞 Please make sure you're in a safe and private place before continuing. Take your time and tell me what happened when you're ready.";
+              gifToShow = 'happy.gif'; 
+              awaitingReportContent = true;
+            } else if (['no', 'nope', 'not now', 'maybe later', 'n'].includes(answer.toLowerCase())) {
+              botMsg.innerText = "No problem at all 💞 I'm here whenever you need me.";
+              gifToShow = 'breath.gif'; 
+            } else {
+              botMsg.innerText = "I want to make sure I understand you correctly. Could you let me know 'yes' or 'no'? I'm here to support you either way.";
+              gifToShow = 'oops.gif'; 
+              
+              
+              const gifImg = document.querySelector('#chatbotGif');
+              if (gifImg) {
+                gifImg.src = `assets/${gifToShow}`;
+              }
+              
+              chatbox.appendChild(botMsg);
+              chatbox.scrollTop = chatbox.scrollHeight;
+              return; 
+            }
+
+            
+            const gifImg = document.querySelector('#chatbotGif');
+            if (gifImg) {
+              gifImg.src = `assets/${gifToShow}`;
+            }
+
+            chatbox.appendChild(botMsg);
+            chatbox.scrollTop = chatbox.scrollHeight;
+            awaitingReportConfirmation = false; // Reset confirmation status
+          }, 1200); 
+
+          return; 
+        }
+
+        // Add typing animation (to all messages)
+        const typingBubble = document.createElement('div');
+        typingBubble.className = 'typing';
+        typingBubble.innerHTML = `
+          <span class="dot"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
+        `;
+        chatbox.appendChild(typingBubble);
+        chatbox.scrollTop = chatbox.scrollHeight;
+
+        try {
+          await new Promise(r => setTimeout(r, 1000));
+
+          const res = await fetch('http://localhost:3000/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message })
+          });
+
+          const data = await res.json();
+          const reply = data.reply;
+          const category = data.category;
+
+          let text = '';
+          let gif = null;
+
+          if (typeof reply === 'object' && reply !== null) {
+            text = reply.reply;
+            gif = reply.gif;
+          } else {
+            text = reply;
+          }
+
+          const gifImg = document.querySelector('#chatbotGif');
+          if (gifImg) {
+            gifImg.src = gif ? `assets/${gif}` : 'assets/happy.gif';
+          }
+
+          chatbox.removeChild(typingBubble);
+
+          const botMsg = document.createElement('div');
+          botMsg.className = 'bubble bot';
+          botMsg.innerText = text;
+          chatbox.appendChild(botMsg);
+
+          // If triggered
+          if (category === 'triggered') {
+            setTimeout(() => {
+              const followupMsg = document.createElement('div');
+              followupMsg.className = 'bubble bot';
+              followupMsg.innerHTML = "<span style='color: yellow; font-weight: bold'>Would you like me to help file a report now?</span>";
+              chatbox.appendChild(followupMsg);
+
+              chatbox.scrollTop = chatbox.scrollHeight;
+              awaitingReportConfirmation = true;
+            }, 3000);
+          }
+
+          chatbox.scrollTop = chatbox.scrollHeight;
+        } catch (err) {
+          chatbox.removeChild(typingBubble);
+
+          const errorMsg = document.createElement('div');
+          errorMsg.className = 'bubble bot';
+          errorMsg.innerText = '⚠️ Something went wrong.';
+          chatbox.appendChild(errorMsg);
+        }
+      }
+      //Quick button (with cool down)
+      let quickAskCooldown = false;
+
+      function quickAsk(text) {
+        if (quickAskCooldown) return;
+        quickAskCooldown = true;
+        sendMessage(text);
+        setTimeout(() => {
+          quickAskCooldown = false;
+        }, 1000); // 1 second cooldown
+      }
+
+      // Chatbox Scrolliing (with mouse)
+      /* 
+      This part is for demonstrating a scrollable chat box on a mobile device (scroll with mouse dragging),
+      but it may not fully replicate the native mobile UX. For PC users of this demo, using the mouse wheel
+      or touchpad is recommended for smoother scrolling.
+      */
+
+       const chatbox = document.getElementById('chatbox');
+      let isDragging = false;
+      let startY, scrollTop;
+
+      chatbox.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        startY = e.pageY - chatbox.offsetTop;
+        scrollTop = chatbox.scrollTop;
+        chatbox.style.cursor = 'grabbing';
+        e.preventDefault(); //prevent rebounding
+      });
+
+      chatbox.addEventListener('mouseleave', () => {
+        isDragging = false;
+        chatbox.style.cursor = 'default';
+      });
+
+      chatbox.addEventListener('mouseup', () => {
+        isDragging = false;
+        chatbox.style.cursor = 'default';
+      });
+
+      chatbox.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        e.preventDefault();
+        const y = e.pageY - chatbox.offsetTop;
+        const walk = (y - startY) * 3; //Make it easier to drag
+        chatbox.scrollTop = scrollTop - walk;
+      });
+      
+
+      // Send message with the Enter Key
+
+      document.getElementById('userInput').addEventListener('keydown', function (event) {
+        if (event.key === 'Enter') {
+          event.preventDefault(); 
+          sendMessage();
+        }
+      });
+
+        document.querySelector('nav a[href="admin.html"]').addEventListener('click', function(e) {
+            e.preventDefault();
+            const phone = document.getElementById('phone');
+            const iframe = document.getElementById('adminFrame');
+            
+            phone.style.display = 'none';
+            iframe.style.display = 'block';
+            iframe.src = 'admin.html';
+        });
+
+        document.querySelector('nav a[href="chatbot.html"]').addEventListener('click', function(e) {
+            e.preventDefault();
+            const phone = document.getElementById('phone');
+            const iframe = document.getElementById('adminFrame');
+
+            iframe.style.display = 'none';
+            iframe.src = '';
+            phone.style.display = 'flex';
+            console.log('Switching back to chatbot');
+        });
+
+    
+
+  
+
+    // Chatbox Greeting
+
+    
+    window.addEventListener("DOMContentLoaded", () => {
+      const chatbox = document.getElementById('chatbox');
+
+      // Typing animation
+      const typingBubble = document.createElement('div');
+      typingBubble.className = 'typing';
+      typingBubble.innerHTML = `
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+      `;
+      chatbox.appendChild(typingBubble);
+      chatbox.scrollTop = chatbox.scrollHeight;
+
+      // Say hello to the user!
+      setTimeout(() => {
+        chatbox.removeChild(typingBubble);
+
+        const welcomeMsg = document.createElement('div');
+        welcomeMsg.className = 'bubble bot';
+        welcomeMsg.innerText = "Hi there! My name is Lighty 😊 I'm here to listen and support you. What you share stays private and safe — unless someone is in danger and needs urgent help. This is a safe space, and you're not alone!\n\nHow may I help you today?";
+
+        chatbox.appendChild(welcomeMsg);
+        chatbox.scrollTop = chatbox.scrollHeight;
+      }, 600); // Delay
+    });
+
+  </script>
+  
+
+  </div>
+</body>
+</html>
