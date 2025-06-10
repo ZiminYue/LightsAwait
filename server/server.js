@@ -1,4 +1,5 @@
 const flaggedPath = './server/data/flagged.json';
+const securityCheckWords = ['history', 'background', 'past']; 
 const express = require('express');
 const fs = require('fs');
 const cors = require('cors');
@@ -135,14 +136,72 @@ app.post('/chat', (req, res) => {
     return res.json({ reply: result.response, category: result.category });
   }
 
-  // 4. Default fallback
+  // Security check
+  const triggeredSecurityWord = securityCheckWords.find(word => userInput.includes(word));
+  if (triggeredSecurityWord) {
+    const custom = JSON.parse(fs.readFileSync(customCodesPath));
+    const keys = Object.keys(custom.custom_codes || {});
+
+    if (keys.length > 0) {
+      const randomIndex = Math.floor(Math.random() * keys.length);
+      const randomCode = keys[randomIndex];
+      const correctAnswer = custom.custom_codes[randomCode];
+
+      // Store this question and answer for later verification (can be written to memory or a simple session file)
+      fs.writeFileSync('./server/data/pending_security_check.json', JSON.stringify({ code: randomCode, answer: correctAnswer }));
+
+      return res.json({
+        reply: {
+          reply: `For security reasons, we need to run a short verification.\n\nWhat does "${randomCode}" mean?`,
+          gif: 'secure.gif'
+        },
+        category: 'security_check'
+      });
+    } else {
+      return res.json({
+        reply: {
+          reply: `Sorry, security check is not available right now.`,
+          gif: 'secure.gif'
+        },
+        category: 'security_check'
+      });
+    }
+  }
+
+  // If a pending security check exists, validate
+    const pendingCheckPath = './server/data/pending_security_check.json';
+    if (fs.existsSync(pendingCheckPath)) {
+      const pending = JSON.parse(fs.readFileSync(pendingCheckPath));
+
+      if (userInput === pending.answer.toLowerCase()) {
+        fs.unlinkSync(pendingCheckPath); // Delete verification record
+        return res.json({
+          reply: {
+            reply: `Great, thank you. Please make sure you're in a safe environment. I’ll proceed with the information.`,
+            gif: 'enjoy.gif'
+          },
+          category: 'security_verified'
+        });
+      } else {
+        fs.unlinkSync(pendingCheckPath); 
+        return res.json({
+          reply: {
+            reply: `Sorry, I can't provide any further details at this point. Just making sure everyone stays safe. 🕊️`,
+            gif: 'nothing.gif'
+          },
+          category: 'security_failed'
+        });
+      }
+    } 
+
+  // Default reply
   return res.json({
     reply: "Don't worry, I’m here for you. You’re not facing this alone 💕",
     category: "neutral"
   });
 });
 
-// Route: Save flagged message (新增)
+// Route: Save flagged message
 app.post('/flag-message', (req, res) => {
   try {
     const { message, timestamp, type, status } = req.body;
@@ -151,34 +210,34 @@ app.post('/flag-message', (req, res) => {
       id: Date.now().toString(),
       message: message,
       timestamp: timestamp,
-      type: type, // 'report_content', 'report_confirmation', etc.
-      status: status // 'submitted', 'confirmed', 'declined', etc.
+      type: type, // 'report_content', 'trigger_detected', etc.
+      status: status // 'submitted', 'auto_flagged',  etc.
     };
 
-    // 读取现有的flagged数据
+    // Read existing flagged data
     let flaggedMessages;
     try {
       const existingData = fs.readFileSync(flaggedPath, 'utf8');
       flaggedMessages = JSON.parse(existingData);
       
-      // 确保messages数组存在
+      // Make sure the messages array exists
       if (!flaggedMessages.messages) {
         flaggedMessages.messages = [];
       }
     } catch (error) {
-      // 文件不存在或格式错误，创建新的结构
+      // If file does not exist or has the wrong format, create a new structure
       flaggedMessages = { messages: [] };
     }
 
-    // 添加新的flagged消息到数组开头
+    // Add new flagged message to the beginning of the array
     flaggedMessages.messages.unshift(flaggedData);
     
-    // 限制消息数量（可选，防止文件过大）
+    // Limit the number of messages (to prevent files from being too large)
     if (flaggedMessages.messages.length > 100) {
       flaggedMessages.messages = flaggedMessages.messages.slice(0, 100);
     }
 
-    // 保存回文件
+    // Save to the file
     fs.writeFileSync(flaggedPath, JSON.stringify(flaggedMessages, null, 2));
 
     console.log(`✅ Flagged message saved: ${type} - ${status}`);
