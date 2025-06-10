@@ -3,15 +3,12 @@ A simple demo that demonstrates some interface design and simulates how the chat
 
 ### Latest Updates
 
-1. The greetings from Lighty offer the user a guarantee of personal data safety
+1. Better layout of Admin page
 
-2. Changed the default message from Lighty
+2. Fixed all layout bugs, yaaaayyyyy!!!!
 
-3. Added cool down to quick buttons
-
-4. More expressions for Lighty
-
-5. Better layout of Admin page
+3. Lighty can now help the user add custom codes (mapping table visible in Admin page)
+   
 
 ### Latest Issues
 
