@@ -5,9 +5,13 @@ A simple demo that demonstrates some interface design and simulates how the chat
 
 1. Messages can be add into flagged messages after confirming to access reporting system
 
+2. The message with trigger words can be added to flagged message too
+
+3. The security check process can be run
+
 ### Latest Issues
 
-Need to add the message with trigger words to flagged message too.
+Need to make sure the answer itself won't trigger any words
 
 
 ### Feature Checklist
