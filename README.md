@@ -3,16 +3,11 @@ A simple demo that demonstrates some interface design and simulates how the chat
 
 ### Latest Updates
 
-1. Better layout of Admin page
-
-2. Fixed all layout bugs, yaaaayyyyy!!!!
-
-3. Lighty can now help the user add custom codes (mapping table visible in Admin page)
-   
+1. Messages can be add into flagged messages after confirming to access reporting system
 
 ### Latest Issues
 
-Trying to do frontend-backend connections simulating AI xp
+Need to add the message with trigger words to flagged message too.
 
 
 ### Feature Checklist
@@ -21,7 +16,7 @@ Trying to do frontend-backend connections simulating AI xp
 
 2.Starting a friendly conversation with the user, guarantee the security of personal data ☒
 
-3.Getting triggered by certain words to access the reporting system ☐
+3.Getting triggered by certain words to access the reporting system ☒
 
 4.Helping users add custom “help codes” to a personal vocabulary ☒
 
