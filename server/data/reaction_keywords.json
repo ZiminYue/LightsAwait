@@ -1,6 +1,9 @@
 {
   "emotional": {
-    "sad": "I'm here with you. Everything will be alright. Do you want to talk about what happened?",
+    "sad": {
+      "reply": "I'm here with you. Everything will be alright. Do you want to talk about what happened?",
+      "gif": "worry.gif"
+    },
     "angry": {
       "reply": "Wow, do you want to talk about what happened?",
       "gif": "oops.gif"

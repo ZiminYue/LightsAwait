@@ -1,6 +1,23 @@
 {
-  "custom_codes": [
-    "blue umbrella",
-    "help with tea"
-  ]
+  "custom_codes": {
+    "blue umbrella": "need emotional support",
+    "help with tea": "panic attack",
+    "tulip": "I",
+    "apple": "I",
+    "let apple": "you",
+    "bad": "very bad",
+    "good": "c",
+    "not": "j",
+    "me": "i",
+    "let pp": "ppp",
+    "holy shit": "appple ss",
+    "hello": "I",
+    "tired": "o",
+    "storm": "panic",
+    "zzz": "sleeping",
+    "asdasdas": "asdad",
+    "aaa": "punch",
+    "sad": "ooo",
+    "+": "-"
+  }
 }
