@@ -1,46 +1,47 @@
 # LightsAwait Demo
-A simple demo that demonstrates some interface design and simulates how the chatbot in an anti-domestic violence platform works from front-end to back-end.
+A demo that demonstrates intuitive interface design and simulates how a chatbot works in an anti-domestic violence platform, from front-end to back-end.
+
+---
 
 ### Latest Updates
 
-1. Finish the layout design of Home Page (index.html) and navigation bar on the top
+Cleaned up the codes🧹
+
+
+### Features of Lighty the Chatbot
+
+1. **Clear visibility** - Easy to notice and access from the homepage
    
-2. Finish the initial layout design of Chatbot page (chatbot.html)
+2. **Supportive conversation initiation** - Starts with caring messages to guide users into conversation
+   
+3. **Transparency & data security assurance** - Provides guidance and explanation on AI functionality and guarantees personal information protection through dialogue
+   
+4. **Trigger word detection** - Automatically detects certain keywords to access the reporting system
+   
+5. **Custom help codes** - Allows users to create personalized code words for their safety vocabulary
+   
+6. **Security verification** - Performs identity checks with custom codes created before when accessing sensitive information
 
-3. Add a few response messages in the .json files (for testing)
-
-
-
-### Feature Checklist
-
-1.Being clearly visible on the homepage ☒
-
-2.Starting a friendly conversation with the user, guarantee the security of personal data ☐
-
-3.Getting triggered by certain words to access the reporting system ☐
-
-4.Helping users add custom “help codes” to a personal vocabulary ☐
-
-5.Starting a security check by asking follow-up questions based on the custom dictionary ☐
+---
 
 ### To run:
-# 1. Clone the repository
+## 1. Clone the repository
 
 ```bash
 git clone https://github.com/ZiminYue/LightsAwait/tree/main
 cd <your-project-folder>
 ```
-# 2. Install dependencies
+## 2. Install dependencies
 
 ```bash
 npm install
 ```
-# 3. Run the server
+## 3. Run the server
 
 ```bash
 node server/server.js
 ```
-# 4. Open in browser
+## 4. Open in browser
 
 After starting the server, open your browser and go to:
 ```
