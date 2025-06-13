@@ -7,6 +7,16 @@ A demo that demonstrates intuitive interface design and simulates how a chatbot 
 
 Cleaned up the codes🧹
 
+---
+### Features of LightsAwait Demo
+
+1. **Intuitive Interactive Interface** - Clear homepage buttons that directly lead to corresponding functions (URL bar displays hints for intended functionality when clicked)
+
+2. **User-friendly Help System** - Humanized chatbot designed to assist users with low digital literacy in accessing features. This demo simulates chatbot functionality through pure code implementation without external AI models
+
+3. **Admin Dashboard** - Backend view displaying the operational mechanics behind some of the chatbot's functions
+
+
 
 ### Features of Lighty the Chatbot
 
@@ -51,3 +61,7 @@ http://localhost:3000
 Open `public/index.html` manually in browser (no bundler needed).
 
 ---
+
+### LLM Disclaimer
+
+This project was developed with coding assistance from ChatGPT, Claude, and Gemini. No third-party code libraries or external AI models were used in the implementation.
