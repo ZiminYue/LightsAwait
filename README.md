@@ -1,5 +1,5 @@
 # LightsAwait Demo
-A demo that demonstrates intuitive interface design and simulates how a chatbot works in an anti-domestic violence platform, from front-end to back-end.
+A demo that demonstrates intuitive interface design and simulates how a chatbot works in **a domestic violence reporting platform**, from front-end to back-end.
 
 ---
 
