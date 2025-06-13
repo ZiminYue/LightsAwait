@@ -3,30 +3,19 @@ A simple demo that demonstrates some interface design and simulates how the chat
 
 ### Latest Updates
 
-1. The greetings from Lighty offer the user a guarantee of personal data safety
+1. Finish the layout design of Home Page (index.html) and navigation bar on the top
+   
+2. Finish the initial layout design of Chatbot page (chatbot.html)
 
-2. Changed the default message from Lighty
+3. Add a few response messages in the .json files (for testing)
 
-3. Added cool down to quick buttons
-
-4. More expressions for Lighty
-
-5. Better layout of Admin page
-
-### Latest Issues
-
-When I switch from Chatbot page to Admin page, they refreshed, so I never get to know what happened to the backend.
-
-ChatGPT offers me 2 ways of solving it: One is to combine these 2 pages into one .html file, another is use something called iframe.
-
-However, as I reached the limit of that "smart model", it couldn't help me figure out how to implement it yet. I'll have to try it later.
 
 
 ### Feature Checklist
 
 1.Being clearly visible on the homepage ☒
 
-2.Starting a friendly conversation with the user, guarantee the security of personal data ☒
+2.Starting a friendly conversation with the user, guarantee the security of personal data ☐
 
 3.Getting triggered by certain words to access the reporting system ☐
 
