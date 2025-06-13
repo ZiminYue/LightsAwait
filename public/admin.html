@@ -40,39 +40,68 @@
       text-decoration: underline;
     }
 
-    #phone {
-      position: relative;
-      width: 80vw;
-      height: calc(135vh - 30px);
-      max-width: 393px;
-      max-height: 852px;
-      background-color: #000;
-      border: 1px solid #ccc;
-      border-radius: 16px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.3);
+    #main-content {
+      width: 90vw;
+      max-width: 800px;
+      height: 85vh;
       display: flex;
       flex-direction: column;
-      padding: 16px;
-      box-sizing: border-box;
-      overflow-y: auto;
     }
 
     h2, h3 {
       text-align: center;
       color: #fff;
-      margin-bottom: 10px;
+      margin-bottom: 15px;
+      flex-shrink: 0;
+      font-size: 24px;
+    }
+
+    .priority {
+      background: #fffbe6;
+      border-left: 4px solid orange;
+      padding: 12px;
+      margin-bottom: 15px;
+      font-size: 16px;
+      color: #333;
+      border-radius: 4px;
+      flex-shrink: 0;
+    }
+
+    #output {
+      flex: 1;
+      overflow-y: auto;
+      padding-right: 15px;
+    }
+
+    /* 自定义滚动条样式 */
+    #output::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    #output::-webkit-scrollbar-track {
+      background: #2a2a2a;
+      border-radius: 4px;
+    }
+
+    #output::-webkit-scrollbar-thumb {
+      background: #555;
+      border-radius: 4px;
+    }
+
+    #output::-webkit-scrollbar-thumb:hover {
+      background: #777;
     }
 
     .section {
       background-color: #f9f9f9;
-      margin-bottom: 15px;
-      padding: 10px;
+      margin-bottom: 20px;
+      padding: 15px;
       border-radius: 8px;
     }
 
     .section h4 {
       margin-top: 0;
-      font-size: 14px;
+      font-size: 18px;
       color: #444;
     }
 
@@ -84,8 +113,8 @@
 
     th, td {
       border: 1px solid #ccc;
-      padding: 6px;
-      font-size: 12px;
+      padding: 10px;
+      font-size: 14px;
       text-align: left;
     }
 
@@ -95,117 +124,212 @@
     }
 
     li {
-      font-size: 14px;
-      margin-bottom: 4px;
+      font-size: 16px;
+      margin-bottom: 6px;
     }
 
-    .priority {
-      background: #fffbe6;
-      border-left: 4px solid orange;
-      padding: 8px;
-      margin-bottom: 12px;
-      font-size: 13px;
+    .flagged-message {
+      background: #fff3cd;
+      border: 1px solid #ffeaa7;
+      padding: 10px;
+      margin: 8px 0;
+      border-radius: 5px;
+      border-left: 4px solid #f39c12;
+    }
+
+    /* between two reports */
+    .report-separator {
+      border: none;
+      height: 2px;
+      background: linear-gradient(to right, transparent, #e74c3c, transparent);
+      margin: 20px 0;
+      position: relative;
+    }
+
+    .report-separator::after {
+      content: "------";
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #f9f9f9;
+      padding: 0 15px;
+      font-size: 11px;
+      color: #e74c3c;
+      font-weight: bold;
+    }
+
+    .flagged-message .timestamp {
+      font-size: 12px;
+      color: #666;
+      margin-bottom: 5px;
+    }
+
+    .flagged-message .content {
+      font-weight: bold;
       color: #333;
-      border-radius: 4px;
+      margin-bottom: 5px;
+    }
+
+    .flagged-message .type {
+      font-size: 11px;
+      background: #e74c3c;
+      color: white;
+      padding: 2px 6px;
+      border-radius: 3px;
+      display: inline-block;
     }
 
     @media (max-height: 880px) {
-      #phone {
-        transform: scale(0.9);
+      #main-content {
+        height: 85vh;
       }
     }
 
     @media (max-height: 800px) {
-      #phone {
-        transform: scale(0.8);
+      #main-content {
+        height: 90vh;
       }
     }
 
     @media (max-height: 720px) {
-      #phone {
-        transform: scale(0.7);
+      #main-content {
+        height: 95vh;
+      }
+    }
+
+    @media (max-width: 768px) {
+      #main-content {
+        width: 95vw;
       }
     }
   </style>
 </head>
 <body>
 
-  <!-- Navigation -->
-  <nav>
-    <a href="index.html">🏠 Home</a>
-    <a href="chatbot.html">💬 Chatbot</a>
-    <a href="admin.html">🛠️ Admin</a>
-  </nav>
 
-  <!-- Phone UI -->
-  <div id="phone">
-    <h2>Keyword Databases</h2>
+  <!-- Main Content -->
+  <div id="main-content">
+    <h2>Backend Databases</h2>
     <div class="priority">
-      <strong>⚠️ Keyword Matching Order:</strong><br>
-      <code>Trigger Words > Custom Codes > Reaction Keywords</code>
+      <strong>Input Keyword Matching Order:</strong><br>
+      <code>Trigger Words > Reaction Keywords</code>
     </div>
+    <p style="background: #000000; padding: 8px; border-left: 3px solid #007bff; margin: 2px 0 10px 0; font-size: 0.9em; color: #74beff;">
+    <strong>Tip:</strong> If the navigation bar doesn't appear at the top, try going back and entering from the <b>Chatbot Page🤖</b>
+    </p>
     <div id="output">Loading...</div>
   </div>
 
   <script>
-    async function loadWords() {
-      try {
-        const res = await fetch('/api/words');
-        const data = await res.json();
+  async function loadWords() {
+    try {
+      const res = await fetch('/api/words');
+      const data = await res.json();
 
-        let html = '';
+      let html = '';
 
-        // 1. Triggers
-        html += `<div class="section">
-                   <h4>🚨 Trigger Words</h4>
-                   <ul>${data.triggers.triggers.map(w => `<li>${w}</li>`).join('')}</ul>
-                   <p><strong>Reply:</strong> ${data.triggers.reply}<br>
-                      <strong>GIF:</strong> ${data.triggers.gif}</p>
-                 </div>`;
+      // 1. Triggers
+      html += `<div class="section">
+                <h4>🚨 Trigger Words</h4>
+                <ul>${(data.triggers.triggers || []).map(w => `<li>${w}</li>`).join('')}</ul>
+                
+              </div>`;
 
-        // 2. Custom Codes (key-value style)
-        html += `<div class="section">
-                   <h4>✨ Custom Codes</h4>
-                   <table>
-                     <tr><th>Code</th></tr>
-                     ${data.custom.custom_codes.map(c => `<tr><td>${c}</td></tr>`).join('')}
-                   </table>
-                 </div>`;
+      // 2. Custom Codes (code → meaning)
+      html += `<div class="section">
+                 <h4>✨ Custom Codes</h4>
+                 <table>
+                   <tr><th>Code</th><th>Meaning</th></tr>`;
 
-        // 3. Reaction Keywords (nested table per category)
-        html += `<div class="section">
-                   <h4>🎭 Reaction Keywords</h4>`;
-        for (const category in data.reactions) {
-          html += `<strong>${category}</strong><table>
-                     <tr><th>Keyword</th><th>Response</th></tr>`;
-          const keywords = data.reactions[category];
-          for (const key in keywords) {
-            html += `<tr><td>${key}</td><td>${keywords[key]}</td></tr>`;
-          }
-          html += `</table>`;
+      const codes = data.custom.custom_codes;
+      if (codes && typeof codes === 'object') {
+        // Optional: Sort alphabetically by code
+        const sortedEntries = Object.entries(codes).sort(([a], [b]) => a.localeCompare(b));
+        for (const [code, meaning] of sortedEntries) {
+          html += `<tr><td>${code}</td><td>${meaning}</td></tr>`;
         }
-        html += `</div>`;
-
-        // 4. Flagged messages area (optional placeholder for now)
-        html += `<div class="section">
-                   <h4>🚩 Flagged Messages</h4>
-                   <ul id="flaggedList"><li>Loading flagged messages...</li></ul>
-                 </div>`;
-
-        document.getElementById('output').innerHTML = html;
-
-        // Load flagged logs
-        const flaggedRes = await fetch('/api/flagged');
-        const flagged = await flaggedRes.json();
-        const flaggedHtml = flagged.messages.map(m => `<li>${m}</li>`).join('');
-        document.getElementById('flaggedList').innerHTML = flaggedHtml;
-
-      } catch (e) {
-        document.getElementById('output').textContent = 'Failed to load data.';
+      } else {
+        html += `<tr><td colspan="2"><em>No valid custom codes found</em></td></tr>`;
       }
-    }
 
-    loadWords();
-  </script>
+      html += `</table></div>`;
+
+      // 3. Reaction Keywords
+     html += `<div class="section">
+            <h4>🎭 Reaction Keywords</h4>`;
+
+      for (const category in data.reactions) {
+        html += `<strong>${category}</strong><table>
+                  <tr><th>Keywords</th><th>Response</th></tr>`;
+
+        const groups = data.reactions[category];
+        for (const [groupName, groupData] of Object.entries(groups)) {
+          const keywordList = groupData.keywords ? groupData.keywords.join(', ') : 'N/A';
+          const response = groupData.reply || groupData;
+          html += `<tr><td>${keywordList}</td><td>${response}</td></tr>`;
+        }
+        html += `</table>`;
+      }
+
+      html += `</div>`;
+
+      // 4. Flagged Messages
+      html += `<div class="section">
+                 <h4>🚩 Flagged Messages</h4>
+                 <ul id="flaggedList"><li>Loading flagged messages...</li></ul>
+               </div>`;
+
+      document.getElementById('output').innerHTML = html;
+
+      // Load flagged logs
+      const flaggedRes = await fetch('/api/flagged');
+      const flagged = await flaggedRes.json();
+
+      // Flagged messages
+      let flaggedHtml = '';
+      if (flagged.messages && flagged.messages.length > 0) {
+        flagged.messages.forEach((msg, index) => {
+          
+          if (typeof msg === 'object' && msg !== null) {
+            
+            const timestamp = msg.timestamp ? new Date(msg.timestamp).toLocaleString() : 'Unknown time';
+            
+            flaggedHtml += `
+              <div class="flagged-message">
+                <div class="timestamp">📅 ${timestamp}</div>
+                <div class="content">💬 ${msg.message || 'No message content'}</div>
+                <span class="type">${msg.type || 'Unknown'}</span>
+                ${msg.status ? `<span class="type" style="background: #27ae60;">${msg.status}</span>` : ''}
+              </div>
+            `;
+          } else {
+            // If it's a string, show it directly
+            flaggedHtml += `
+              <div class="flagged-message">
+                <div class="content">💬 ${msg}</div>
+              </div>
+            `;
+          }
+          
+          // Add seperator after the message except for the last one
+          if (index < flagged.messages.length - 1) {
+            flaggedHtml += '<hr class="report-separator">';
+          }
+        });
+      } else {
+        flaggedHtml = '<div style="text-align: center; color: #666; padding: 20px;">No flagged messages yet.</div>';
+      }
+
+      document.getElementById('flaggedList').innerHTML = flaggedHtml;
+
+    } catch (e) {
+      document.getElementById('output').textContent = 'Failed to load data.';
+    }
+  }
+
+  loadWords();
+  console.log("Admin panel loaded");
+</script>
 </body>
 </html>
