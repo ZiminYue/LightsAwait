@@ -1,21 +1,45 @@
 {
-  "emotional": {
-    "sad": "I'm here with you. Everything will be alright. Do you want to talk about what happened?",
-    "angry": {
-      "reply": "Wow, do you want to talk about what happened?",
+  "Emotional": {
+    "sad_group": {
+      "keywords": ["sad", "upset", "depressed", "down", "blue", "unhappy","not happy"],
+      "reply": "I'm here with you. Everything will be alright. Do you want to talk about what happened?",
+      "gif": "worry.gif"
+    },
+    "angry_group": {
+      "keywords": ["angry", "mad", "furious", "pissed", "annoyed", "frustrated","not ok"],
+      "reply": "Wow, sorry to hear that! Do you want to talk about what happened?",
       "gif": "oops.gif"
     },
-    "tired": "You may take a rest. I'll be here for you anytime.",
-    "happy": {
-      "reply": "Great! That's fantastic!!",
-      "gif": "enjoy.gif"}
+    "tired_group": {
+      "keywords": ["tired", "exhausted", "sleepy", "worn out", "fatigue", "drained"],
+      "reply": "It’s okay — just take a rest. I’ll be here whenever you need me. If something’s on your mind, you can always come talk to me.",
+      "gif": "breath.gif"
+    },
+    "happy_group": {
+      "keywords": ["happy", "excited", "joyful", "cheerful", "great", "awesome"],
+      "reply": "That’s amazing! I'm so happy for you! Hope even better things are on their way to you ✨",
+      "gif": "enjoy.gif"
+    }
   },
-  "explanation": {
-    "AI": "I'm your private assistance.",
-    "chatbot": "I get to know you better by studying your conversations."
+  "Explanation": {
+    "ai_group": {
+      "keywords": ["AI", "artificial intelligence", "who are you?", "what are you?","who is lighty","what is lighty"],
+      "reply": "I’m your AI assistant, Lighty🌞Think of me as a quiet companion who’s always here to listen, help out, and gently guide when things feel a little hard. You don’t need to know anything special to talk to me — just speak from the heart💕\n\nWhenever you need help, I’ll be here🤗"
+    },
+    "chatbot_group": {
+      "keywords": ["explain function", "how do you work", "what can you do?", "data", "information","privacy"],
+      "reply": "I'm here to help you with questions, decisions, or just someone to talk to💕I don’t follow a script — I listen and learn from our conversations, so I can respond in a way that fits you😉 If you’re ever unsure what to ask or how to use something, just let me know.\n\nYou can type, speak, or send a picture, and we can talk in many different languages. Whatever feels easiest for you!"
+    },
+    "language_group": {
+      "keywords": ["can you speak another language", "change language", "switch language", "speak chinese"],
+      "reply": "Sure! LightsAwait and I support many languages to make sure you get the help you need 🌐\n\nWhat language would you feel most comfortable using?🙂",
+      "gif": "enjoy.gif"
+    }
   },
-  "danger": {
-    "violence": "This sounds serious. Do you want to make an anonymous report?",
-    "hurt": "I can help you contact support!"
+  "Assistance": {
+    "help_group": {
+      "keywords": ["i need help", "someone else need help", "help", "assistant","assistance"],
+      "reply": "Sure, I'm here to support you💞How can I help today?"
+    }
   }
 }

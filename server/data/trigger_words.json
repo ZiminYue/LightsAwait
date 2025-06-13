@@ -7,6 +7,7 @@
     "scary",
     "blood"
   ],
-  "reply": "That's serious!",
-  "gif": "serious.gif"
+  "reply": "Oh no, sounds like something troubling happened. If you'd like help filing a report, I'm here to support you through the process. Feel free to describe what occurred in whatever way feels comfortable for you 💭 Don't worry — the report will be submitted anonymously. We only collect essential information when absolutely necessary to offer help 💕",
+  "gif": "serious.gif",
+  "show_report_button": true
 }

@@ -1,6 +1,11 @@
 {
-  "custom_codes": [
-    "blue umbrella",
-    "help with tea"
-  ]
+  "custom_codes": {
+    "blue umbrella": "need emotional support",
+    "help with tea": "panic attack",
+    "pua": "gaslighting",
+    "red apple": "bleeding",
+    "storm": "panic",
+    "rope": "restriction of personal freedom",
+    "aaaa": "punch"
+  }
 }
