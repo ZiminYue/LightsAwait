@@ -35,10 +35,17 @@ Cleaned up the codes🧹
 ---
 
 ### To run:
+
+## Prerequisites
+- Node.js (Download and install from [nodejs.org](https://nodejs.org/) if not already installed)
+
+## Setup Instructions
+**Note: The following commands should be run in your terminal/command prompt**
+
 ## 1. Clone the repository
 
 ```bash
-git clone https://github.com/ZiminYue/LightsAwait/tree/main
+git clone https://github.com/ZiminYue/LightsAwait.git
 cd <your-project-folder>
 ```
 ## 2. Install dependencies
@@ -57,8 +64,6 @@ After starting the server, open your browser and go to:
 ```
 http://localhost:3000
 ```
-
-Open `public/index.html` manually in browser (no bundler needed).
 
 ---
 
