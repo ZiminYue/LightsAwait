@@ -1,5 +1,5 @@
 # LightsAwait Demo
-A demo that demonstrates intuitive interface design and simulates how a chatbot works in **a domestic violence reporting platform**, from front-end to back-end.
+A demo that demonstrates intuitive interface design and simulates how a chatbot works in **a domestic violence reporting platform** with script logic, from front-end to back-end.
 
 ---
 
@@ -65,6 +65,28 @@ After starting the server, open your browser and go to:
 http://localhost:3000
 ```
 
+---
+### Project Structure
+```
+  📁 LightsAwait/
+  ├── public/
+  │   ├── assets
+  │   │   └── Lighty's GIFs
+  │   ├── index.html
+  │   ├── chatbot.html
+  │   └── admin.html
+  ├── server/
+  │   ├── server.js
+  │   └── data/
+  │       ├── custom_codes.json
+  │       ├── flagged.json
+  │       ├── trigger_words.json
+  │       └── reaction_keywords.json
+  ├── node_modules/    # Installed with npm install in Step 2
+  ├── package.json
+  ├── package-lock.json 
+  └── README.md
+```
 ---
 
 ### LLM Disclaimer
