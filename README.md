@@ -5,7 +5,7 @@ A demo that demonstrates intuitive interface design and simulates how a chatbot 
 
 ### Latest Updates
 
-Cleaned up the codes🧹
+Cleaned up the code🧹
 
 ---
 ### Features of LightsAwait Demo
@@ -92,3 +92,4 @@ http://localhost:3000
 ### LLM Disclaimer
 
 This project was developed with coding assistance from ChatGPT, Claude, and Gemini. No third-party code libraries or external AI models were used in the implementation.
+
