@@ -10,7 +10,7 @@ Cleaned up the code🧹
 ---
 ### Features of LightsAwait Demo
 
-1. **Intuitive Interactive Interface** - Clear homepage buttons that directly lead to corresponding functions (URL bar displays hints for intended functionality when clicked)
+1. **Intuitive Interactive Interface** - Clear homepage buttons that directly lead to corresponding functions (URL bar displays placeholders for intended functionality when clicked)
 
 2. **User-friendly Help System** - Humanized chatbot designed to assist users with low digital literacy in accessing features. This demo simulates chatbot functionality through pure code implementation without external AI models
 
@@ -92,4 +92,5 @@ http://localhost:3000
 ### LLM Disclaimer
 
 This project was developed with coding assistance from ChatGPT, Claude, and Gemini. No third-party code libraries or external AI models were used in the implementation.
+
 
