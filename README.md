@@ -16,6 +16,8 @@ Cleaned up the code🧹
 
 3. **Admin Dashboard** - Backend view displaying the operational mechanics behind some of the chatbot's functions
 
+🎬 Demo Video:  
+https://youtu.be/rbUWAKaCjmU
 
 
 ### Features of Lighty the Chatbot
@@ -92,5 +94,6 @@ http://localhost:3000
 ### LLM Disclaimer
 
 This project was developed with coding assistance from ChatGPT, Claude, and Gemini. No third-party code libraries or external AI models were used in the implementation.
+
 
 
